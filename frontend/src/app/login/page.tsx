@@ -42,17 +42,19 @@ const LoginPage = () => {
     <div style={{
       maxWidth: '400px', 
       margin: 'auto', 
-      padding: '20px', 
-      backgroundColor: '#f0f0f0',
+      padding: '10px', 
+      backgroundColor: 'white',
       height: '100vh', 
       display: 'flex', 
       flexDirection: 'column', 
       justifyContent: 'center', 
       alignItems: 'center'
     }}>
-      <h1>SPEED Login</h1>
+      <h1 className="text-4xl font-bold text-black mb-10">SPEED Login</h1>
       <div style={{ position: 'absolute', top: '10px', left: '10px' }}>
-        <button onClick={handleAdminLogin} style={{ padding: '10px 20px' }}>
+        <button onClick={handleAdminLogin} 
+          className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center bg-gray-200 text-black gap-2 text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
+        >
           Admin Login
         </button>
       </div>
@@ -86,11 +88,15 @@ const LoginPage = () => {
           }}
         />
       </div>
-      <div style={{ display: 'flex' }}>
-        <button onClick={handleLogin} style={{ padding: '10px 20px', marginRight: '10px' }}>
+      <div style={{ display: 'flex', gap: '200px' }}>
+        <button onClick={handleLogin} 
+        className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center bg-gray-200 text-black gap-2 text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
+        >
           Login
         </button>
-        <button onClick={() => router.push('/register')} style={{ padding: '10px 20px', marginTop: '10px' }}>
+        <button onClick={() => router.push('/register')}
+        className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center bg-gray-200 text-black gap-2 text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
+        >
           Register
         </button>
       </div>
