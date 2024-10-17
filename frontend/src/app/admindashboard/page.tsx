@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useEffect, useState } from 'react';
 
@@ -18,6 +18,10 @@ interface Article {
 const AdminDashboard = () => {
   // Define the state type to be an array of Article
   const [articles, setArticles] = useState<Article[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchField, setSearchField] = useState<"title" | "author">("title");
+  const [sortField, setSortField] = useState<keyof Article>('title');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
   useEffect(() => {
     const fetchArticles = async () => {
@@ -37,46 +41,100 @@ const AdminDashboard = () => {
     fetchArticles();
   }, []);
 
-  return (
-    <div style={{ padding: '20px' }}>
-      <h1>Admin Dashboard</h1>
-      <h2>Submitted Articles</h2>
-      <table style={{ width: '100%', border: '1px solid black', borderCollapse: 'collapse' }}>
-        <thead>
-          <tr>
-            <th style={{ border: '1px solid black', padding: '10px' }}>Title</th>
-            <th style={{ border: '1px solid black', padding: '10px' }}>Author</th>
-            <th style={{ border: '1px solid black', padding: '10px' }}>Journal</th>
-            <th style={{ border: '1px solid black', padding: '10px' }}>Date</th>
-            <th style={{ border: '1px solid black', padding: '10px' }}>Volume</th>
-            <th style={{ border: '1px solid black', padding: '10px' }}>Number</th>
-            <th style={{ border: '1px solid black', padding: '10px' }}>Pages</th>
-            <th style={{ border: '1px solid black', padding: '10px' }}>DOI</th>
-          </tr>
-        </thead>
-        <tbody>
-          {articles.length === 0 ? (
-            <tr>
-              <td colSpan={8} style={{ padding: '10px', textAlign: 'center' }}>No articles found</td>
-            </tr>
-          ) : (
-            articles.map((article) => (
-              <tr key={article._id}>
-                <td style={{ border: '1px solid black', padding: '10px' }}>{article.title}</td>
-                <td style={{ border: '1px solid black', padding: '10px' }}>{article.author}</td>
-                <td style={{ border: '1px solid black', padding: '10px' }}>{article.journal}</td>
-                <td style={{ border: '1px solid black', padding: '10px' }}>{article.date}</td>
-                <td style={{ border: '1px solid black', padding: '10px' }}>{article.volume}</td>
-                <td style={{ border: '1px solid black', padding: '10px' }}>{article.number}</td>
-                <td style={{ border: '1px solid black', padding: '10px' }}>{article.pages}</td>
-                <td style={{ border: '1px solid black', padding: '10px' }}>{article.doi}</td>
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
-    </div>
-  );
+  const handleSort = (field: keyof Article) => {
+      const order = sortField === field && sortOrder === 'asc' ? 'desc' : 'asc';
+      setSortField(field);
+      setSortOrder(order);
+    };
+
+  const sortedArticles = articles
+      .filter((article) => {
+          const valueToSearch = article[searchField].toLowerCase();
+          return valueToSearch.includes(searchTerm.toLowerCase());
+      })
+      .sort((a, b) => {
+          if (a[sortField] < b[sortField]) return sortOrder === 'asc' ? -1 : 1;
+          if (a[sortField] > b[sortField]) return sortOrder === 'asc' ? 1 : -1;
+          return 0;
+      });
+
+    return (
+        <div style={{ padding: '20px' }}>
+            <h1>Admin Dashboard</h1>
+
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+                <h2>Submitted Articles</h2>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                    <select
+                        value={searchField}
+                        onChange={(e) => setSearchField(e.target.value as "title" | "author")}
+                        style={{ marginRight: "10px", padding: "8px", fontSize: "1em" }}
+                    >
+                        <option value="title">Title</option>
+                        <option value="author">Author</option>
+                    </select>
+                    <input
+                        type="text"
+                        placeholder={`Search by ${searchField}...`}
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        style={{ padding: "8px", fontSize: "1em" }}
+                    />
+                </div>
+            </div>
+
+            <table style={{ width: '100%', border: '1px solid black', borderCollapse: 'collapse' }}>
+                <thead>
+                    <tr>
+                        <th style={{ border: '1px solid black', padding: '10px', cursor: 'pointer' }} onClick={() => handleSort('title')}>
+                            Title {sortField === 'title' && (sortOrder === 'asc' ? '▲' : '▼')}
+                        </th>
+                        <th style={{ border: '1px solid black', padding: '10px', cursor: 'pointer' }} onClick={() => handleSort('author')}>
+                            Author {sortField === 'author' && (sortOrder === 'asc' ? '▲' : '▼')}
+                        </th>
+                        <th style={{ border: '1px solid black', padding: '10px', cursor: 'pointer' }} onClick={() => handleSort('journal')}>
+                            Journal {sortField === 'journal' && (sortOrder === 'asc' ? '▲' : '▼')}
+                        </th>
+                        <th style={{ border: '1px solid black', padding: '10px', cursor: 'pointer' }} onClick={() => handleSort('date')}>
+                            Date {sortField === 'date' && (sortOrder === 'asc' ? '▲' : '▼')}
+                        </th>
+                        <th style={{ border: '1px solid black', padding: '10px', cursor: 'pointer' }} onClick={() => handleSort('volume')}>
+                            Volume {sortField === 'volume' && (sortOrder === 'asc' ? '▲' : '▼')}
+                        </th>
+                        <th style={{ border: '1px solid black', padding: '10px', cursor: 'pointer' }} onClick={() => handleSort('number')}>
+                            Number {sortField === 'number' && (sortOrder === 'asc' ? '▲' : '▼')}
+                        </th>
+                        <th style={{ border: '1px solid black', padding: '10px', cursor: 'pointer' }} onClick={() => handleSort('pages')}>
+                            Pages {sortField === 'pages' && (sortOrder === 'asc' ? '▲' : '▼')}
+                        </th>
+                        <th style={{ border: '1px solid black', padding: '10px', cursor: 'pointer' }} onClick={() => handleSort('doi')}>
+                            DOI {sortField === 'doi' && (sortOrder === 'asc' ? '▲' : '▼')}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {sortedArticles.length === 0 ? (
+                        <tr>
+                            <td colSpan={8} style={{ padding: '10px', textAlign: 'center' }}>No articles found</td>
+                        </tr>
+                    ) : (
+                        sortedArticles.map((article) => (
+                            <tr key={article._id}>
+                                <td style={{ border: '1px solid black', padding: '10px' }}>{article.title}</td>
+                                <td style={{ border: '1px solid black', padding: '10px' }}>{article.author}</td>
+                                <td style={{ border: '1px solid black', padding: '10px' }}>{article.journal}</td>
+                                <td style={{ border: '1px solid black', padding: '10px' }}>{article.date}</td>
+                                <td style={{ border: '1px solid black', padding: '10px' }}>{article.volume}</td>
+                                <td style={{ border: '1px solid black', padding: '10px' }}>{article.number}</td>
+                                <td style={{ border: '1px solid black', padding: '10px' }}>{article.pages}</td>
+                                <td style={{ border: '1px solid black', padding: '10px' }}>{article.doi}</td>
+                            </tr>
+                        ))
+                    )}
+                </tbody>
+            </table>
+        </div>
+    );
 };
 
 export default AdminDashboard;
