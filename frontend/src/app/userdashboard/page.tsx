@@ -1,5 +1,6 @@
 "use client"; 
 
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 export default function UserPage() {
@@ -13,6 +14,7 @@ export default function UserPage() {
     pages: '',
     doi: '',
   });
+  const router = useRouter();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setArticle({
@@ -57,11 +59,17 @@ export default function UserPage() {
     }
   };
 
+  const handleLogin = () => {
+    router.push('/login');
+  }
+
   return (
     <div className="flex flex-col items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)] relative bg-white">
       <header className="absolute top-0 left-0 p-4 flex gap-4">
-        <button className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center bg-gray-200 text-black gap-2 text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5">
-          Logout
+      <button onClick={handleLogin} 
+          className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center bg-gray-200 text-black gap-2 text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
+        >
+        Logout
         </button>
         <button className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center bg-gray-200 text-black gap-2 text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5">
           My Articles

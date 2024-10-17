@@ -34,7 +34,6 @@ const LoginPage = () => {
   };
 
   const handleAdminLogin = () => {
-    // Redirect to /adminlogin.tsx for admin login
     router.push('/adminlogin');
   };
 

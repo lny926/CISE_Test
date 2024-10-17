@@ -33,19 +33,30 @@ const AdminLoginPage = () => {
     }
   };  
 
+  const handleLogin = () => {
+    router.push('/login');
+  }
+
   return (
     <div style={{
       maxWidth: '400px', 
       margin: 'auto', 
       padding: '20px', 
-      backgroundColor: '#f0f0f0',
+      backgroundColor: 'white',
       height: '100vh', 
       display: 'flex', 
       flexDirection: 'column', 
       justifyContent: 'center', 
       alignItems: 'center'
     }}>
-      <h1>Admin Login</h1>
+      <h1 className="text-4xl font-bold text-black mb-10">Admin Login</h1>
+      <div style={{ position: 'absolute', top: '10px', left: '10px' }}>
+        <button onClick={handleLogin} 
+          className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center bg-gray-200 text-black gap-2 text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
+        >
+          Back
+        </button>
+      </div>
       <div style={{ marginBottom: '10px', width: '100%' }}>
         <label>Email:</label>
         <input
@@ -76,7 +87,9 @@ const AdminLoginPage = () => {
           }}
         />
       </div>
-      <button onClick={handleAdminLogin} style={{ padding: '10px 20px', marginTop: '10px' }}>
+      <button onClick={handleAdminLogin} 
+      className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center bg-gray-200 text-black gap-2 text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
+      >
         Admin Login
       </button>
     </div>

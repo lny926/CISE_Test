@@ -60,10 +60,9 @@ const AdminDashboard = () => {
 
     return (
         <div style={{ padding: '20px' }}>
-            <h1>Admin Dashboard</h1>
-
+            <h1 className="text-4xl font-bold text-black mb-10">Admin Dashboard</h1>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
-                <h2>Submitted Articles</h2>
+                <h2 className="text-2xl font-bold text-black">Submitted Articles</h2>
                 <div style={{ display: "flex", alignItems: "center" }}>
                     <select
                         value={searchField}
