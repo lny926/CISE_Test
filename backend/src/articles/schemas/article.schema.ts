@@ -28,6 +28,9 @@ export class Article {
 
   @Prop({ required: true })
   doi: string;
+
+  @Prop({ default: false }) // New field to track rejection
+  isRejected: boolean;
 }
 
 export const ArticleSchema = SchemaFactory.createForClass(Article);

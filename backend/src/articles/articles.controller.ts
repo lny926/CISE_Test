@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Body } from '@nestjs/common';
+import { Controller, Post, Get, Body, Param, Patch } from '@nestjs/common';
 import { ArticlesService } from './articles.service';
 import { Article } from './schemas/article.schema';
 
@@ -6,7 +6,6 @@ import { Article } from './schemas/article.schema';
 export class ArticlesController {
   constructor(private readonly articlesService: ArticlesService) {}
 
-  // Existing POST route for user to submit articles
   @Post('articles')
   async createArticle(@Body() article: Article) {
     try {
@@ -17,12 +16,34 @@ export class ArticlesController {
     }
   }
 
-  // New GET route for admin to fetch all articles
+  // Get only non-rejected articles
   @Get('articles')
   async getAllArticles() {
     try {
       const articles = await this.articlesService.findAll();
       return { success: true, articles };
+    } catch (error) {
+      return { success: false, message: error.message };
+    }
+  }
+
+  // Get rejected articles
+  @Get('articles/rejected')
+  async getRejectedArticles() {
+    try {
+      const rejectedArticles = await this.articlesService.findRejected();
+      return { success: true, articles: rejectedArticles };
+    } catch (error) {
+      return { success: false, message: error.message };
+    }
+  }
+
+  // Reject an article
+  @Patch('articles/:id/reject')
+  async rejectArticle(@Param('id') id: string) {
+    try {
+      await this.articlesService.rejectArticle(id);
+      return { success: true };
     } catch (error) {
       return { success: false, message: error.message };
     }
