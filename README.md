@@ -77,6 +77,9 @@ Start the frontend by navigating to the frontend/ folder and running:
 - Email: admin@admin.com
 - Password: admin
 
+### ANALYST LOGIN DETAILS:
+- Email: analyst@analyst.com
+- password: analyst
 
 
 
