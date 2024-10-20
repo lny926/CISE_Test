@@ -32,6 +32,10 @@ const AnalystLoginPage = () => {
     }
   };
 
+  const handleLogin = () => {
+    router.push('/login');
+  }
+
   return (
     <div style={{
       maxWidth: '400px', 
@@ -45,6 +49,13 @@ const AnalystLoginPage = () => {
       alignItems: 'center'
     }}>
       <h1 className="text-4xl font-bold text-black mb-10">Analyst Login</h1>
+      <div style={{ position: 'absolute', top: '10px', left: '10px' }}>
+        <button onClick={handleLogin} 
+          className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center bg-gray-200 text-black gap-2 text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
+        >
+          Back
+        </button>
+      </div>
       <div style={{ marginBottom: '10px', width: '100%' }}>
         <label>Email:</label>
         <input

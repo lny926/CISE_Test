@@ -15,18 +15,30 @@ export class ArticlesService {
     return newArticle.save();
   }
 
-  // Find non-rejected articles (for AdminDashboard)
+  // Find non-rejected and non-accepted articles (for AdminDashboard)
   async findAll(): Promise<Article[]> {
-    return this.articleModel.find({ isRejected: { $ne: true } }).exec(); // Fetch articles that are not rejected
+    return this.articleModel
+      .find({ isRejected: { $ne: true }, isAccepted: { $ne: true } })
+      .exec(); // Fetch articles that are neither rejected nor accepted
   }
 
-  // Find rejected articles (for rejectedarticles page)
+  // Find accepted articles (for AnalystDashboard)
+  async findAccepted(): Promise<Article[]> {
+    return this.articleModel.find({ isAccepted: true }).exec(); // Fetch only accepted articles
+  }
+
+  // Find rejected articles (for RejectedArticles page)
   async findRejected(): Promise<Article[]> {
     return this.articleModel.find({ isRejected: true }).exec(); // Fetch only rejected articles
   }
 
-  // Update an article to mark it as rejected
+  // Mark article as rejected
   async rejectArticle(id: string): Promise<void> {
     await this.articleModel.findByIdAndUpdate(id, { isRejected: true }).exec(); // Mark article as rejected
+  }
+
+  // Mark article as accepted
+  async acceptArticle(id: string): Promise<void> {
+    await this.articleModel.findByIdAndUpdate(id, { isAccepted: true }).exec(); // Mark article as accepted
   }
 }

@@ -74,7 +74,22 @@ const AdminDashboard = () => {
     } catch (error) {
       console.error('Error rejecting article:', error);
     }
-  }; 
+  };
+
+  const handleAccept = async (id: string) => {
+    try {
+      const response = await fetch(`http://localhost:8082/api/articles/${id}/accept`, {
+        method: 'PATCH',
+      });
+      if (response.ok) {
+        setArticles(articles.filter(article => article._id !== id)); // Remove accepted article from list
+      } else {
+        alert('Failed to accept the article.');
+      }
+    } catch (error) {
+      console.error('Error accepting article:', error);
+    }
+  };
 
   const toggleColumnVisibility = (column: keyof typeof visibleColumns) => {
       setVisibleColumns(prevState => ({
@@ -294,21 +309,36 @@ const AdminDashboard = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {sortedArticles.map((article) => (
-                        <tr key={article._id}>
-                            {visibleColumns.title && <td style={{ border: '1px solid black', padding: '10px' }}>{article.title}</td>}
-                            {visibleColumns.author && <td style={{ border: '1px solid black', padding: '10px' }}>{article.author}</td>}
-                            {visibleColumns.journal && <td style={{ border: '1px solid black', padding: '10px' }}>{article.journal}</td>}
-                            {visibleColumns.date && <td style={{ border: '1px solid black', padding: '10px' }}>{article.date}</td>}
-                            {visibleColumns.volume && <td style={{ border: '1px solid black', padding: '10px' }}>{article.volume}</td>}
-                            {visibleColumns.number && <td style={{ border: '1px solid black', padding: '10px' }}>{article.number}</td>}
-                            {visibleColumns.pages && <td style={{ border: '1px solid black', padding: '10px' }}>{article.pages}</td>}
-                            {visibleColumns.doi && <td style={{ border: '1px solid black', padding: '10px' }}>{article.doi}</td>}
-                            <td style={{ border: '1px solid black', padding: '10px' }}>
-                                <button onClick={() => handleReject(article._id)}>Reject</button>
-                            </td>
-                        </tr>
-                    ))}
+                {sortedArticles.map((article) => (
+                    <tr key={article._id}>
+                    {visibleColumns.title && <td style={{ border: '1px solid black', padding: '10px' }}>{article.title}</td>}
+                    {visibleColumns.author && <td style={{ border: '1px solid black', padding: '10px' }}>{article.author}</td>}
+                    {visibleColumns.journal && <td style={{ border: '1px solid black', padding: '10px' }}>{article.journal}</td>}
+                    {visibleColumns.date && <td style={{ border: '1px solid black', padding: '10px' }}>{article.date}</td>}
+                    {visibleColumns.volume && <td style={{ border: '1px solid black', padding: '10px' }}>{article.volume}</td>}
+                    {visibleColumns.number && <td style={{ border: '1px solid black', padding: '10px' }}>{article.number}</td>}
+                    {visibleColumns.pages && <td style={{ border: '1px solid black', padding: '10px' }}>{article.pages}</td>}
+                    {visibleColumns.doi && <td style={{ border: '1px solid black', padding: '10px' }}>{article.doi}</td>}
+                    
+                    <td style={{ border: '1px solid black', padding: '10px' }}>
+                    {/* Add Accept Button */}
+                    <button
+                        style={{ marginRight: '10px', padding: '5px', backgroundColor: 'green', color: 'white' }}
+                        onClick={() => handleAccept(article._id)}
+                    >
+                        Accept
+                    </button>
+
+                    {/* Existing Reject Button */}
+                    <button
+                        style={{ padding: '5px', backgroundColor: 'red', color: 'white' }}
+                        onClick={() => handleReject(article._id)}
+                    >
+                        Reject
+                    </button>
+                    </td>                                       
+                    </tr>
+                ))}
                 </tbody>
             </table>
         </div>

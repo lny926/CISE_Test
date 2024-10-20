@@ -29,8 +29,11 @@ export class Article {
   @Prop({ required: true })
   doi: string;
 
-  @Prop({ default: false }) // New field to track rejection
+  @Prop({ default: false }) // Track rejected status
   isRejected: boolean;
+
+  @Prop({ default: false }) // Track accepted status
+  isAccepted: boolean;
 }
 
 export const ArticleSchema = SchemaFactory.createForClass(Article);
