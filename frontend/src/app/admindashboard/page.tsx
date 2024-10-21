@@ -119,7 +119,7 @@ const AdminDashboard = () => {
 
   return (
     <div style={{ padding: '20px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         {/* Left-side buttons */}
         <div style={{ display: 'flex', gap: '10px' }}>
           <button
