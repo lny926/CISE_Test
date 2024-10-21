@@ -39,7 +39,11 @@ const LoginPage = () => {
 
   const handleAnalystLogin = () => {
     router.push('/analystlogin');
-  }
+  };
+
+  const handleModeratorLogin = () => {
+    router.push('/moderatorlogin');
+  };
 
   return (
     <div style={{
@@ -66,6 +70,11 @@ const LoginPage = () => {
           className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center bg-gray-200 text-black gap-2 text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
         >
           Analyst Login
+        </button>
+        <button onClick={handleModeratorLogin}
+          className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center bg-gray-200 text-black gap-2 text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
+        >
+          Moderator Login
         </button>
       </div>
       <div style={{ marginBottom: '10px', width: '100%' }}>

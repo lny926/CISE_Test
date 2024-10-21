@@ -26,7 +26,7 @@ export class AnalystController {
       return { success: false, message: 'Invalid password' };
     }
 
-    console.log('Admin login successful'); //Debugging log
+    console.log('Analyst login successful'); //Debugging log
     return { success: true, message: 'Analyst login successful' };
   }
 }
