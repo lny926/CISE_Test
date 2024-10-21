@@ -34,6 +34,9 @@ export class Article {
 
   @Prop({ default: false }) // Track accepted status
   isAccepted: boolean;
+
+  @Prop({ default: false }) // Track approved status
+  isApproved: boolean;
 }
 
 export const ArticleSchema = SchemaFactory.createForClass(Article);

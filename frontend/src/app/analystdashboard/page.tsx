@@ -37,6 +37,29 @@ const AnalystDashboard = () => {
     fetchAcceptedArticles();
   }, []);
 
+  // Function to approve the article
+  const handleApprove = async (articleId: string) => {
+    try {
+      const response = await fetch(`http://localhost:8082/api/articles/${articleId}/approve`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        // Remove the approved article from the dashboard and inform the user
+        setArticles((prev) => prev.filter((article) => article._id !== articleId)); 
+        alert('Article approved successfully');
+      } else {
+        alert('Failed to approve the article.');
+      }
+    } catch (error) {
+      console.error('Error approving the article:', error);
+      alert('An error occurred while approving the article.');
+    }
+  };
+
   // Handle back button to navigate to analyst login page
   const handleBack = () => {
     router.push('/analystlogin'); // Redirect to analyst login page
@@ -66,12 +89,13 @@ const AnalystDashboard = () => {
             <th style={{ border: '1px solid black', padding: '10px' }}>Number</th>
             <th style={{ border: '1px solid black', padding: '10px' }}>Pages</th>
             <th style={{ border: '1px solid black', padding: '10px' }}>DOI</th>
+            <th style={{ border: '1px solid black', padding: '10px' }}>Action</th>
           </tr>
         </thead>
         <tbody>
           {articles.length === 0 ? (
             <tr>
-              <td colSpan={8} style={{ padding: '10px', textAlign: 'center' }}>No accepted articles found</td>
+              <td colSpan={9} style={{ padding: '10px', textAlign: 'center' }}>No accepted articles found</td>
             </tr>
           ) : (
             articles.map((article) => (
@@ -84,6 +108,14 @@ const AnalystDashboard = () => {
                 <td style={{ border: '1px solid black', padding: '10px' }}>{article.number}</td>
                 <td style={{ border: '1px solid black', padding: '10px' }}>{article.pages}</td>
                 <td style={{ border: '1px solid black', padding: '10px' }}>{article.doi}</td>
+                <td style={{ border: '1px solid black', padding: '10px' }}>
+                  <button 
+                    onClick={() => handleApprove(article._id)}
+                    className="rounded bg-green-500 text-white px-4 py-2"
+                  >
+                    Approve
+                  </button>
+                </td>
               </tr>
             ))
           )}

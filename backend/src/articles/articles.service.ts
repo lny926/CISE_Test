@@ -24,7 +24,8 @@ export class ArticlesService {
 
   // Find accepted articles (for AnalystDashboard)
   async findAccepted(): Promise<Article[]> {
-    return this.articleModel.find({ isAccepted: true }).exec(); // Fetch only accepted articles
+    // eslint-disable-next-line prettier/prettier
+    return this.articleModel.find({ isAccepted: true, isApproved: {$ne: true} }).exec(); // Fetch only accepted articles
   }
 
   // Find rejected articles (for RejectedArticles page)
@@ -50,5 +51,15 @@ export class ArticlesService {
   // Find all articles (rejected, accepted, and pending)
   async findAllArticles(): Promise<Article[]> {
     return this.articleModel.find().exec(); // Fetch all articles
+  }
+
+  // Approve an article
+  async approveArticle(id: string): Promise<void> {
+    await this.articleModel.findByIdAndUpdate(id, { isApproved: true }).exec(); // Mark article as approved
+  }
+
+  // Find approved articles
+  async findApproved(): Promise<Article[]> {
+    return this.articleModel.find({ isApproved: true }).exec(); // Find all articles where `isApproved` is true
   }
 }

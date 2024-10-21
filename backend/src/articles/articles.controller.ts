@@ -60,6 +60,17 @@ export class ArticlesController {
     }
   }
 
+  // Get approved articles
+  @Get('articles/approved')
+  async getApprovedArticles() {
+    try {
+      const approvedArticles = await this.articlesService.findApproved();
+      return { success: true, articles: approvedArticles };
+    } catch (error) {
+      return { success: false, message: error.message };
+    }
+  }
+
   // Reject an article
   @Patch('articles/:id/reject')
   async rejectArticle(@Param('id') id: string) {
@@ -90,6 +101,17 @@ export class ArticlesController {
   ): Promise<any> {
     try {
       await this.articlesService.updateArticle(id, updateData);
+      return { success: true };
+    } catch (error) {
+      return { success: false, message: error.message };
+    }
+  }
+
+  // Add the approve route to mark articles as "approved"
+  @Patch('articles/:id/approve')
+  async approveArticle(@Param('id') id: string) {
+    try {
+      await this.articlesService.approveArticle(id);
       return { success: true };
     } catch (error) {
       return { success: false, message: error.message };
