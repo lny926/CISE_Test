@@ -45,6 +45,10 @@ const LoginPage = () => {
     router.push('/moderatorlogin');
   };
 
+  const handleBackClick = () => {
+      router.push('/'); // Navigate back to the homepage (frontend/src/app/page.tsx)
+  };
+
   return (
     <div style={{
       maxWidth: '400px', 
@@ -57,7 +61,14 @@ const LoginPage = () => {
       justifyContent: 'center', 
       alignItems: 'center'
     }}>
-    
+
+      <button
+          onClick={handleBackClick}
+          className="absolute top-4 left-4 rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center bg-gray-200 text-black gap-2 text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 mb-10"
+      >
+          Back
+      </button>
+
       <h1 className="text-4xl font-bold text-black mb-10">SPEED Login</h1>
       
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
