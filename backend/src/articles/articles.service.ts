@@ -41,4 +41,14 @@ export class ArticlesService {
   async acceptArticle(id: string): Promise<void> {
     await this.articleModel.findByIdAndUpdate(id, { isAccepted: true }).exec(); // Mark article as accepted
   }
+
+  // Update article details
+  async updateArticle(id: string, updateData: Partial<Article>): Promise<void> {
+    await this.articleModel.findByIdAndUpdate(id, updateData).exec();
+  }
+
+  // Find all articles (rejected, accepted, and pending)
+  async findAllArticles(): Promise<Article[]> {
+    return this.articleModel.find().exec(); // Fetch all articles
+  }
 }

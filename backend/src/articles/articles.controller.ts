@@ -27,6 +27,17 @@ export class ArticlesController {
     }
   }
 
+  // Get all articles (rejected, accepted, and pending)
+  @Get('articles/all')
+  async getAllArticlesForAdminSettings() {
+    try {
+      const articles = await this.articlesService.findAllArticles();
+      return { success: true, articles };
+    } catch (error) {
+      return { success: false, message: error.message };
+    }
+  }
+
   // Get accepted articles
   @Get('articles/accepted')
   async getAcceptedArticles() {
@@ -65,6 +76,20 @@ export class ArticlesController {
   async acceptArticle(@Param('id') id: string) {
     try {
       await this.articlesService.acceptArticle(id);
+      return { success: true };
+    } catch (error) {
+      return { success: false, message: error.message };
+    }
+  }
+
+  // Edit an article
+  @Patch('articles/:id/edit')
+  async editArticle(
+    @Param('id') id: string,
+    @Body() updateData: Partial<Article>,
+  ): Promise<any> {
+    try {
+      await this.articlesService.updateArticle(id, updateData);
       return { success: true };
     } catch (error) {
       return { success: false, message: error.message };

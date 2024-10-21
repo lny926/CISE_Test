@@ -35,7 +35,7 @@ const AdminDashboard = () => {
 
   const [startYear, setStartYear] = useState('');
   const [endYear, setEndYear] = useState('');
-  const router = useRouter(); // Use the router to handle navigation
+  const router = useRouter();
 
   useEffect(() => {
     const fetchArticles = async () => {
@@ -133,6 +133,12 @@ const AdminDashboard = () => {
             onClick={() => router.push('/rejectedarticles')}
           >
             Rejected Articles
+          </button>
+          <button
+            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center bg-gray-200 text-black gap-2 text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
+            onClick={() => router.push('/adminsettings')}
+          >
+            Admin Settings
           </button>
         </div>
 
