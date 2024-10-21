@@ -81,6 +81,10 @@ Start the frontend by navigating to the frontend/ folder and running:
 - Email: analyst@analyst.com
 - password: analyst
 
+### MODERATOR LOGIN DETAILS:
+- Email: moderator@moderator.com
+- Password: moderator
+
 
 
 
