@@ -1,0 +1,15 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\backend\\src",
+    "\\backend\\src\\articles",
+    "\\backend\\src\\articles\\schemas",
+    "\\frontend",
+    "\\frontend\\src",
+    "\\frontend\\src\\app",
+    "\\frontend\\src\\app\\admindashboard",
+    "\\frontend\\src\\app\\viewarticle"
+  ],
+  "SelectedNode": "\\frontend\\src\\app\\viewarticle\\page.tsx",
+  "PreviewInSolutionExplorer": false
+}

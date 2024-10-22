@@ -81,7 +81,7 @@ export class ArticlesService {
       return null;
     }
     const sum = article.ratings.reduce((a, b) => a + b, 0);
-    const average = sum / (article.ratings.length - 1);
+    const average = sum / article.ratings.length;
     return average;
   }
 }
