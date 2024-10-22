@@ -37,6 +37,9 @@ export class Article {
 
   @Prop({ default: false }) // Track approved status
   isApproved: boolean;
+
+  @Prop({ type: [Number], default: [] }) // Add ratings field as an array of numbers
+  ratings: number[]; // Use an array to store multiple ratings
 }
 
 export const ArticleSchema = SchemaFactory.createForClass(Article);

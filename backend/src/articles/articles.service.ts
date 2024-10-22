@@ -62,4 +62,26 @@ export class ArticlesService {
   async findApproved(): Promise<Article[]> {
     return this.articleModel.find({ isApproved: true }).exec(); // Find all articles where `isApproved` is true
   }
+
+  // Submit article rate
+  async rateArticle(id: string, rating: number): Promise<Article | null> {
+    const article = await this.articleModel.findById(id);
+    if (!article) {
+      return null;
+    }
+    article.ratings.push(rating);
+    await article.save();
+    return article;
+  }
+
+  // Calculate article rate
+  async getAverageRating(id: string): Promise<number | null> {
+    const article = await this.articleModel.findById(id);
+    if (!article || article.ratings.length === 0) {
+      return null;
+    }
+    const sum = article.ratings.reduce((a, b) => a + b, 0);
+    const average = sum / (article.ratings.length - 1);
+    return average;
+  }
 }

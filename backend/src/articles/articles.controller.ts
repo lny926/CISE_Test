@@ -117,4 +117,31 @@ export class ArticlesController {
       return { success: false, message: error.message };
     }
   }
+
+  // Submit rate"
+  @Post('articles/:id/rate')
+  async rateArticle(@Param('id') id: string, @Body() body: { rating: number }) {
+    try {
+      const { rating } = body;
+      const updatedArticle = await this.articlesService.rateArticle(id, rating);
+      if (updatedArticle) {
+        return { success: true, message: 'Rating submitted' };
+      } else {
+        return { success: false, message: 'Article not found' };
+      }
+    } catch (error) {
+      return { success: false, message: error.message };
+    }
+  }
+
+  // Caculate average rate"
+  @Get('articles/:id/average-rating')
+  async getAverageRating(@Param('id') id: string) {
+    try {
+      const averageRating = await this.articlesService.getAverageRating(id);
+      return { success: true, averageRating };
+    } catch (error) {
+      return { success: false, message: error.message };
+    }
+  }
 }
