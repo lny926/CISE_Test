@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation'; // Import useRouter
+import axios from 'axios';
 
 interface Article {
   _id: string;
@@ -13,12 +14,12 @@ interface Article {
   number: string;
   pages: string;
   doi: string;
+  ratings: number[];
 }
-
-
 
 const ViewArticle = () => {
   const [articles, setArticles] = useState<Article[]>([]);
+  const [averageRatings, setAverageRatings] = useState<{ [key: string]: number }>({});
   const router = useRouter(); // Initialize useRouter for navigation
   const [searchTerm, setSearchTerm] = useState("");
   const [searchField, setSearchField] = useState<"title" | "author">("title");
@@ -33,6 +34,7 @@ const ViewArticle = () => {
       number: true,
       pages: true,
       doi: true,
+      ratings: true,
   });
 
   const [startYear, setStartYear] = useState('');
@@ -45,6 +47,7 @@ const ViewArticle = () => {
         const result = await response.json();
         if (response.ok) {
           setArticles(result.articles);
+          fetchAverageRatings(result.articles);
         } else {
           alert('Failed to fetch approved articles.');
         }
@@ -55,6 +58,26 @@ const ViewArticle = () => {
 
     fetchApprovedArticles();
   }, []);
+
+  const fetchAverageRatings = async (articles: Article[]) => {
+      const ratingsPromises = articles.map(article => getAverageRating(article._id));
+      const ratingsResults = await Promise.all(ratingsPromises);
+      const newAverageRatings = articles.reduce((acc, article, index) => {
+          acc[article._id] = ratingsResults[index];
+          return acc;
+      }, {} as { [key: string]: number });
+      setAverageRatings(newAverageRatings);
+    };
+
+    const getAverageRating = async (articleId: string): Promise<number> => {
+      try {
+          const response = await axios.get(`/api/articles/${articleId}/ratings`);
+          return response.data.averageRating;
+      } catch (error) {
+          console.error(`Error fetching average rating for article ${articleId}:`, error);
+          return 0;
+      }
+  };
 
   const handleBackClick = () => {
     router.push('/'); // Navigate back to the homepage (frontend/src/app/page.tsx)
@@ -88,6 +111,36 @@ const ViewArticle = () => {
           if (a[sortField] > b[sortField]) return sortOrder === 'asc' ? 1 : -1;
           return 0;
       });
+
+    const submitRating = async (articleId: string, rating: number) => {
+        try {
+            const response = await axios.post(`http://localhost:8082/api/articles/${articleId}/rate`, { rating });
+
+            if (response.data.success) {
+           
+                setAverageRatings((prev) => {
+                    const currentAverage = prev[articleId] || 0;
+                    if (currentAverage == 0) {
+                        const updatedAverage = rating;
+                        return {
+                            ...prev,
+                            [articleId]: updatedAverage,
+                        };
+                    }
+                    const updatedAverage = (currentAverage + rating) / 2; 
+                    return {
+                        ...prev,
+                        [articleId]: updatedAverage,
+                    };
+                });
+                alert(response.data.message); 
+            } else {
+                alert(`Failed to submit rating: ${response.data.message}`);
+            }
+        } catch (error) {
+            console.error('Failed to submit rating', error);
+        }
+    };
 
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 100 }, (_, i) => currentYear - i);
@@ -202,6 +255,11 @@ const ViewArticle = () => {
                                 DOI {sortField === 'doi' && (sortOrder === 'asc' ? '▲' : '▼')}
                             </th>
                         )}
+                        {visibleColumns.ratings && (
+                            <th style={{ border: '1px solid black', padding: '10px' }}>
+                                Average Rating
+                            </th>
+                        )}
                     </tr>
                 </thead>
                 <tbody>
@@ -210,11 +268,21 @@ const ViewArticle = () => {
                             {visibleColumns.title && <td style={{ border: '1px solid black', padding: '10px' }}>{article.title}</td>}
                             {visibleColumns.author && <td style={{ border: '1px solid black', padding: '10px' }}>{article.author}</td>}
                             {visibleColumns.journal && <td style={{ border: '1px solid black', padding: '10px' }}>{article.journal}</td>}
-                            {visibleColumns.date && <td style={{ border: '1px solid black', padding: '10px' }}>{new Date(article.date).toLocaleDateString()}</td>}
+                            {visibleColumns.date && <td style={{ border: '1px solid black', padding: '10px' }}>{article.date}</td>}
                             {visibleColumns.volume && <td style={{ border: '1px solid black', padding: '10px' }}>{article.volume}</td>}
                             {visibleColumns.number && <td style={{ border: '1px solid black', padding: '10px' }}>{article.number}</td>}
                             {visibleColumns.pages && <td style={{ border: '1px solid black', padding: '10px' }}>{article.pages}</td>}
                             {visibleColumns.doi && <td style={{ border: '1px solid black', padding: '10px' }}>{article.doi}</td>}
+                            {visibleColumns.ratings && (
+                                <td style={{ border: '1px solid black', padding: '10px' }}>
+                                    {averageRatings[article._id] ? averageRatings[article._id].toFixed(2) : 'No ratings'}
+                                    <button onClick={() => submitRating(article._id, 1)} style={{ marginLeft: '10px' }}>Rate 1</button>
+                                    <button onClick={() => submitRating(article._id, 2)} style={{ marginLeft: '5px' }}>Rate 2</button>
+                                    <button onClick={() => submitRating(article._id, 3)} style={{ marginLeft: '5px' }}>Rate 3</button>
+                                    <button onClick={() => submitRating(article._id, 4)} style={{ marginLeft: '5px' }}>Rate 4</button>
+                                    <button onClick={() => submitRating(article._id, 5)} style={{ marginLeft: '5px' }}>Rate 5</button>
+                                </td>
+                            )}
                         </tr>
                     ))}
                 </tbody>
